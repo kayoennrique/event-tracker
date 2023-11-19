@@ -1,13 +1,10 @@
 import React, { useState } from 'react';
-import { IEvent } from '../../interfaces/IEvent';
 import style from './Form.module.scss';
-import { getId } from '../../util';
-import { useSetRecoilState } from 'recoil';
-import { listOfEventsState } from '../../state/atom';
+import useAddEvents from '../../state/hooks/useAddEvent';
 
 const Form: React.FC = () => {
-  
-  const setEventList = useSetRecoilState<IEvent[]> (listOfEventsState);
+
+  const addEvents = useAddEvents();
 
   const [description, setDescription] = useState('');
   const [dateStart, setDateStart] = useState('');
@@ -15,76 +12,82 @@ const Form: React.FC = () => {
   const [endDate, setEndDate] = useState('');
   const [timeEnd, setTimeEnd] = useState('');
 
-  const mountDate = (date:string, hour: string) => {
+  const mountDate = (date: string, hour: string) => {
     const dateString = date.slice(0, 10)
     return new Date(`${dateString}T${hour}`)
   }
 
   const submitForm = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
-    const occurrence = {
-      id: getId(),
-      description,
-      start: mountDate(dateStart, startTime),
-      end: mountDate(endDate, timeEnd),
-      complete: false
-    }
-    setEventList(listOld => [...listOld, occurrence])
-    setDescription('')
-    setDateStart('')
-    setStartTime('')
-    setEndDate('')
-    setTimeEnd('')
+    try {
+      const occurrence = {
+        description,
+        start: mountDate(dateStart, startTime),
+        end: mountDate(endDate, timeEnd),
+        complete: false
+      }
+
+      addEvents(occurrence)
+
+      setDescription('')
+      setDateStart('')
+      setStartTime('')
+      setEndDate('')
+      setTimeEnd('')
+    } catch (error) {
+      alert(error)
   }
+}
+
   return (<form className={style.Form} onSubmit={submitForm}>
     <h3 className={style.title}>Novo evento</h3>
 
     <label>Descrição</label>
-    <input 
-      type="text" 
+    <input
+      type="text"
       name="description"
       id="description"
       className={style.input}
-      onChange={event => setDescription(event.target.value)} 
-      placeholder="Descrição" value={description} 
+      onChange={event => setDescription(event.target.value)}
+      placeholder="Descrição" value={description}
       autoComplete="off"
       required />
 
-      <label>Data de início</label>
-      <div className={style.inputContainer}>
-        <input 
-          type="date" 
-          name="dateStart"
-          className={style.input}
-          onChange={event => setDateStart(event.target.value)} 
-          value={dateStart}
-          required />
-        <input 
-          type="time" 
-          name="startTime"
-          className={style.input}
-          onChange={event => setStartTime(event.target.value)} 
-          value={startTime}
-          required />
-      </div>
+    <label>Data de início</label>
+    <div className={style.inputContainer}>
+      <input
+        type="date"
+        name="dateStart"
+        className={style.input}
+        onChange={event => setDateStart(event.target.value)}
+        value={dateStart}
+        required />
+      <input
+        type="time"
+        name="startTime"
+        className={style.input}
+        onChange={event => setStartTime(event.target.value)}
+        value={startTime}
+        required />
+    </div>
 
-      <label>Data de término</label>
-      <div className={style.inputContainer}>
-        <input 
-          type="date" 
-          name="endDate"
-          className={style.input}
-          onChange={event => setEndDate(event.target.value)} 
-          value={endDate}
-          required />
-        <input 
-          type="time" 
-          name="timeEnd"
-          className={style.input}
-          onChange={event => setTimeEnd(event.target.value)} 
-          value={timeEnd}
-          required />
-      </div>
+    <label>Data de término</label>
+    <div className={style.inputContainer}>
+      <input
+        type="date"
+        name="endDate"
+        className={style.input}
+        onChange={event => setEndDate(event.target.value)}
+        value={endDate}
+        required />
+      <input
+        type="time"
+        name="timeEnd"
+        className={style.input}
+        onChange={event => setTimeEnd(event.target.value)}
+        value={timeEnd}
+        required />
+    </div>
 
     <button className={style.button}>
       Salvar

@@ -1,13 +1,12 @@
 import React from 'react';
-import { useRecoilValue } from 'recoil';
-import { listOfEventsState } from '../../state/atom';
 import Event from '../Event';
 import Filter from '../Filter';
 import style from './EventList.module.scss';
+import useEventList from '../../state/hooks/useEventList';
 
 const EventList: React.FC<{ toFilterApplied: (data: Date | null) => void }> = ({ toFilterApplied }) => {
 
-  const events = useRecoilValue(listOfEventsState);
+  const events = useEventList();
 
   return (<section>
     <Filter toFilterApplied={toFilterApplied} />
@@ -16,7 +15,7 @@ const EventList: React.FC<{ toFilterApplied: (data: Date | null) => void }> = ({
         <Event event={event} key={event.id} />
       ))}
     </div>
-  </section>)
+  </section>);  
 }
 
 export default EventList;
