@@ -34,16 +34,16 @@ function App() {
     // events.push(event)
     // setEvents([...events])
   }
-  const changeStatusEvent = (id: number) => {
+  //const changeStatusEvent = (id: number) => {
     // const event = events.find(event => event.id === id)
     // if (event) {
     //   event.complete = !event.complete
     // }
     // setEvents([...events])
-  }
-  const deleteEvent = (id: number) => {
-    // setEvents([...events.filter(event => event.id !== id)])
-  }
+  //}
+  // const deleteEvent = (id: number) => {
+  // setEvents([...events.filter(event => event.id !== id)])
+  //}
 
   const applyFilter = (data: Date | null) => {
     setFilter(data)
@@ -65,9 +65,7 @@ function App() {
           <hr />
           <Card>
             <EventList
-             toFilterApplied={applyFilter} 
-             whenChangeStatus={changeStatusEvent} 
-             whenDeleteEvent={deleteEvent} 
+              toFilterApplied={applyFilter}
             />
           </Card>
         </div>
