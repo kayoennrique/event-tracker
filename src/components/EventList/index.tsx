@@ -1,14 +1,18 @@
 import React from 'react';
-import { IEvent } from '../../interfaces/IEvent';
+import { useRecoilValue } from 'recoil';
+import { listOfEventsState } from '../../state/atom';
 import Event from '../Event';
 import Filter from '../Filter';
 import style from './EventList.module.scss';
 
-const EventList: React.FC<{ 
-  events: IEvent[], 
-  whenChangeStatus: (id: number) => void, 
-  whenDeleteEvent: (id: number) => void, 
-  toFilterApplied: (data: Date | null) => void }> = ({ events, whenDeleteEvent, whenChangeStatus, toFilterApplied }) => {
+
+const EventList: React.FC<{
+  whenChangeStatus: (id: number) => void,
+  whenDeleteEvent: (id: number) => void,
+  toFilterApplied: (data: Date | null) => void
+}> = ({ whenDeleteEvent, whenChangeStatus, toFilterApplied }) => {
+
+  const events = useRecoilValue(listOfEventsState);
 
   return (<section>
     <Filter toFilterApplied={toFilterApplied} />

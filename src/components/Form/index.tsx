@@ -1,8 +1,14 @@
 import React, { useState } from 'react';
 import { IEvent } from '../../interfaces/IEvent';
 import style from './Form.module.scss';
+import { getId } from '../../util';
+import { useSetRecoilState } from 'recoil';
+import { listOfEventsState } from '../../state/atom';
 
-const Form: React.FC<{ toSave: (event: IEvent) => void }> = ({ toSave }) => {
+const Form: React.FC = () => {
+  
+  const setEventList = useSetRecoilState<IEvent[]> (listOfEventsState);
+
   const [description, setDescription] = useState('');
   const [dateStart, setDateStart] = useState('');
   const [startTime, setStartTime] = useState('');
@@ -16,12 +22,14 @@ const Form: React.FC<{ toSave: (event: IEvent) => void }> = ({ toSave }) => {
 
   const submitForm = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
-    toSave({
+    const occurrence = {
+      id: getId(),
       description,
       start: mountDate(dateStart, startTime),
       end: mountDate(endDate, timeEnd),
       complete: false
-    })
+    }
+    setEventList(listOld => [...listOld, occurrence])
     setDescription('')
     setDateStart('')
     setStartTime('')
