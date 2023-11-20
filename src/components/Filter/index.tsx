@@ -1,17 +1,23 @@
 import React, { useState } from 'react';
+import { useSetRecoilState } from 'recoil';
+import { IEventFilter } from '../../interfaces/IEventFilter';
+import { eventFilter } from '../../state/atom';
 import style from './Filter.module.scss';
 
-const Filter: React.FC<{ toFilterApplied: (data: Date | null) => void }> = ({ toFilterApplied }) => {
+const Filter: React.FC = () => {
   
-  const [data, setData] = useState('');
+  const [data, setData] = useState('')
+  const setEventFilter = useSetRecoilState<IEventFilter>(eventFilter)
   
   const submitForm = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
-    if (!data) {
-      toFilterApplied(null)
-      return
+    const filter: IEventFilter = {}
+    if (data) {
+      filter.data = new Date(data);
+    } else {
+      filter.data = null
     }
-    toFilterApplied(new Date(data))
+    setEventFilter(filter);    
   }
 
   return (<form className={style.Filter} onSubmit={submitForm}>
