@@ -29,3 +29,16 @@ export const eventsFilteredState = selector<IEvent[]>({
     return events;
   },
 });
+
+export const eventAsync = selector({
+  key: 'eventAsync',
+  get: async () => {
+    const responseHttp = await fetch('http://localhost:8080/eventos');
+    const eventsJson: IEvent[] = await responseHttp.json();
+    return eventsJson.map(event => ({
+      ...event,
+      start: new Date(event.start),
+      end: new Date(event.end)
+    }));
+  }
+});
